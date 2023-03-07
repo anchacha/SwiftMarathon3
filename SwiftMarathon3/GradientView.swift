@@ -57,7 +57,7 @@ class GradientView: UIView {
         case .linear:
             let startPoint = colors.count == 2 ? CGPoint(x: -bounds.width / 3, y: -bounds.height / 3) : .zero
             let endPoint = CGPoint(x: bounds.width, y: bounds.height)
-            context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: .drawsBeforeStartLocation)
+            context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: [.drawsBeforeStartLocation, .drawsAfterEndLocation])
         case .radial:
             context.drawRadialGradient(
                 gradient,

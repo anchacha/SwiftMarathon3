@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     private var leadingConstraintsArray: [NSLayoutConstraint] = []
     private var traillingConstraintsArray: [NSLayoutConstraint] = []
     
-    var animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1.5, curve: .linear)
+    var animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, curve: .linear)
     
     var cubeSide: CGFloat = 64
     let multipier: CGFloat = 1.5
@@ -55,12 +55,12 @@ class ViewController: UIViewController {
     }
     
     @objc func releaseSlider() {
-        let displayLink = CADisplayLink(target: self, selector: #selector(updateAnimation))
+        let displayLink = CADisplayLink(target: self, selector: #selector(updateSliderValue))
         displayLink.add(to: .current, forMode: .common)
         self.animator.startAnimation()
     }
     
-    @objc func updateAnimation() {
+    @objc func updateSliderValue() {
         if self.animator.isRunning {
             self.slider.value = Float(self.animator.fractionComplete)
         }
