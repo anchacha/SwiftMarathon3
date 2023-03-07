@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F4F7A3C29B7AF2F00ABC28C /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F7A3B29B7AF2F00ABC28C /* GradientView.swift */; };
 		2FB2574E29B74D1900EAD896 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2574D29B74D1900EAD896 /* AppDelegate.swift */; };
 		2FB2575029B74D1900EAD896 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2574F29B74D1900EAD896 /* SceneDelegate.swift */; };
 		2FB2575229B74D1900EAD896 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB2575129B74D1900EAD896 /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2F4F7A3B29B7AF2F00ABC28C /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		2FB2574A29B74D1900EAD896 /* SwiftMarathon3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftMarathon3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FB2574D29B74D1900EAD896 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FB2574F29B74D1900EAD896 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 				2FB2574D29B74D1900EAD896 /* AppDelegate.swift */,
 				2FB2574F29B74D1900EAD896 /* SceneDelegate.swift */,
 				2FB2575129B74D1900EAD896 /* ViewController.swift */,
+				2F4F7A3B29B7AF2F00ABC28C /* GradientView.swift */,
 				2FB2575329B74D1900EAD896 /* Main.storyboard */,
 				2FB2575629B74D1900EAD896 /* Assets.xcassets */,
 				2FB2575829B74D1900EAD896 /* LaunchScreen.storyboard */,
@@ -140,6 +143,7 @@
 			files = (
 				2FB2575229B74D1900EAD896 /* ViewController.swift in Sources */,
 				2FB2574E29B74D1900EAD896 /* AppDelegate.swift in Sources */,
+				2F4F7A3C29B7AF2F00ABC28C /* GradientView.swift in Sources */,
 				2FB2575029B74D1900EAD896 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,6 +299,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -323,6 +328,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
