@@ -12,12 +12,16 @@ class ViewController: UIViewController {
     private lazy var slider = UISlider()
     
     private lazy var squareView = GradientView(colors: [.systemBlue, .magenta, .green, .purple],
-                                               cornerRadius: 8)
+                                               cornerRadius: 8, multiplier: 1.5)
+    private lazy var square2 = GradientView(colors: [.yellow, .blue],
+                                            cornerRadius: 8, multiplier: 3)
     
-    var leadingConstraint: NSLayoutConstraint?
-    var traiilingConstant: NSLayoutConstraint?
+    private lazy var squaresArray: [GradientView] = [squareView, square2]
     
-    var animator: UIViewPropertyAnimator!
+    private var leadingConstraintsArray: [NSLayoutConstraint] = []
+    private var traillingConstraintsArray: [NSLayoutConstraint] = []
+    
+    var animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, curve: .linear)
     
     var cubeSide: CGFloat = 64
     let multipier: CGFloat = 1.5
@@ -27,13 +31,17 @@ class ViewController: UIViewController {
         self.view.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 16, leading: 16,
                                                                      bottom: 16, trailing: 16)
         self.setupAnimation()
-        self.setupView()
+        self.setupViews()
         self.setupSlider()
-       
         
-        self.view.addConstraint(.init(
-            item: self.slider, attribute: .top, relatedBy: .equal,
-            toItem: self.squareView, attribute: .bottom, multiplier: 1, constant: self.cubeSide))
+        self.view.addConstraints([
+            .init(item: self.squareView, attribute: .top, relatedBy: .equal,
+                  toItem: self.view, attribute: .topMargin, multiplier: 1, constant: self.cubeSide),
+            .init(item: self.slider, attribute: .top, relatedBy: .equal,
+                  toItem: self.squareView, attribute: .bottom, multiplier: 1, constant: self.cubeSide),
+            .init(item: self.square2, attribute: .top, relatedBy: .equal,
+                  toItem: self.slider, attribute: .bottom, multiplier: 1, constant: self.cubeSide)
+        ])
     }
     
     override func viewDidLayoutSubviews() {
@@ -43,31 +51,30 @@ class ViewController: UIViewController {
     }
     
     @objc func sliderValueChanged() {
-        animator?.fractionComplete = CGFloat(slider.value)
+        self.animator.fractionComplete = CGFloat(slider.value)
     }
     
     @objc func releaseSlider() {
         let displayLink = CADisplayLink(target: self, selector: #selector(updateAnimation))
         displayLink.add(to: .current, forMode: .common)
-        animator?.startAnimation()
+        self.animator.startAnimation()
     }
     
     @objc func updateAnimation() {
-        if(animator.isRunning) {
-            slider.value = Float(animator.fractionComplete)
+        if self.animator.isRunning {
+            self.slider.value = Float(self.animator.fractionComplete)
         }
     }
     
     func setupAnimation() {
-        self.animator = UIViewPropertyAnimator(duration: 1, curve: .linear)
-        animator?.pausesOnCompletion = true
+        self.animator.pausesOnCompletion = true
         
-        animator?.addAnimations {
-            self.leadingConstraint?.isActive = false
-            self.traiilingConstant?.isActive = true
+        self.animator.addAnimations {
+            self.leadingConstraintsArray.forEach { $0.isActive = false }
+            self.traillingConstraintsArray.forEach { $0.isActive = true }
             
-            self.squareView.transform = CGAffineTransform(rotationAngle: .pi / 2)
-                .scaledBy(x: self.multipier, y: self.multipier)
+            self.squaresArray.forEach { $0.transform = CGAffineTransform(rotationAngle: .pi / 2)
+                .scaledBy(x: $0.sizeMultiplier, y: $0.sizeMultiplier) }
             self.view.layoutIfNeeded()
         }
     }
@@ -81,38 +88,41 @@ class ViewController: UIViewController {
         
         self.slider.value = self.slider.minimumValue
         self.slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-        slider.addTarget(self, action: #selector(releaseSlider), for: .touchUpInside)
+        self.slider.addTarget(self, action: #selector(releaseSlider), for: .touchUpInside)
     }
     
-    func setupView() {
-        self.view.addSubview(self.squareView)
-        self.squareView.translatesAutoresizingMaskIntoConstraints = false
+    func setupViews() {
+        self.squaresArray.forEach { view in
+            self.view.addSubview(view)
+            self.addCommonConstraints(squareView: view)
+        }
         
-//        self.squareView.backgroundColor = .clear
-        
-        let margins = self.view.layoutMarginsGuide
-        self.leadingConstraint = .init(item: self.squareView,
-                                       attribute: .leading,
-                                       relatedBy: .equal,
-                                       toItem: self.view,
-                                       attribute: .leadingMargin, multiplier: 1, constant: 0)
-        self.leadingConstraint?.isActive = true
-        
-        self.traiilingConstant = .init(item: self.squareView,
-                                       attribute: .trailing,
-                                       relatedBy: .equal,
-                                       toItem: self.view,
-                                       attribute: .trailingMargin,
-                                       multiplier: 1, constant: self.distanseToNewCubeCenter())
-        self.traiilingConstant?.isActive = false
-        
-        self.squareView.widthAnchor.constraint(equalToConstant: self.cubeSide).isActive = true
-        self.squareView.heightAnchor.constraint(equalToConstant: self.cubeSide).isActive = true
-        self.squareView.topAnchor.constraint(equalTo: margins.topAnchor, constant: 64).isActive = true
+        self.leadingConstraintsArray.forEach({ $0.isActive = true })
+        self.traillingConstraintsArray.forEach({ $0.isActive = false })
     }
     
-    private func distanseToNewCubeCenter() -> CGFloat {
-        let endCubeSidePercentageGrow = 1 - ((self.cubeSide * self.multipier) / self.cubeSide)
+    private func addCommonConstraints(squareView: GradientView) {
+        squareView.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.leadingConstraintsArray.append(.init(item: squareView,
+                                                  attribute: .leading,
+                                                  relatedBy: .equal,
+                                                  toItem: self.view,
+                                                  attribute: .leadingMargin, multiplier: 1, constant: 0))
+        
+        self.traillingConstraintsArray.append(.init(item: squareView,
+                                                    attribute: .trailing,
+                                                    relatedBy: .equal,
+                                                    toItem: self.view,
+                                                    attribute: .trailingMargin,
+                                                    multiplier: 1, constant: self.distanseToNewCubeCenter(multiplier: squareView.sizeMultiplier)))
+        
+        squareView.widthAnchor.constraint(equalToConstant: self.cubeSide).isActive = true
+        squareView.heightAnchor.constraint(equalToConstant: self.cubeSide).isActive = true
+    }
+    
+    private func distanseToNewCubeCenter(multiplier: CGFloat) -> CGFloat {
+        let endCubeSidePercentageGrow = 1 - ((self.cubeSide * multiplier) / self.cubeSide)
         let halfSideGrow = endCubeSidePercentageGrow / 2
         let dist = (self.cubeSide * halfSideGrow)
         
@@ -120,14 +130,16 @@ class ViewController: UIViewController {
     }
     
     private func addShadow() {
-        let path = UIBezierPath(roundedRect: self.squareView.bounds,
-                                cornerRadius: self.squareView.layer.cornerRadius)
-        
-        self.squareView.layer.shadowPath = path.cgPath
-        self.squareView.layer.shadowOffset = CGSize(width: 5, height: 10)
-        self.squareView.layer.shadowOpacity = 1
-        self.squareView.layer.shadowRadius = 3
-        self.squareView.layer.shadowColor = UIColor.gray.cgColor
-        self.squareView.layer.masksToBounds = false
+        self.squaresArray.forEach {
+            let path = UIBezierPath(roundedRect: $0.bounds,
+                                    cornerRadius: $0.layer.cornerRadius)
+            
+            $0.layer.shadowPath = path.cgPath
+            $0.layer.shadowOffset = CGSize(width: 5, height: 10)
+            $0.layer.shadowOpacity = 1
+            $0.layer.shadowRadius = 3
+            $0.layer.shadowColor = UIColor.gray.cgColor
+            $0.layer.masksToBounds = false
+        }
     }
 }

@@ -10,14 +10,16 @@ import UIKit
 class GradientView: UIView {
     
     public var gradientColors: [UIColor]
+    public var sizeMultiplier: CGFloat
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         self.setGradient(colors: self.gradientColors)
     }
     
-    init(colors: [UIColor], cornerRadius: CGFloat) {
+    init(colors: [UIColor], cornerRadius: CGFloat, multiplier: CGFloat) {
         self.gradientColors = colors
+        self.sizeMultiplier = multiplier
         super.init(frame: .zero)
         
         self.backgroundColor = .clear
