@@ -13,15 +13,15 @@ class ViewController: UIViewController {
     
     private lazy var squareView = GradientView(colors: [.systemBlue, .magenta, .green, .purple],
                                                cornerRadius: 8, multiplier: 1.5)
-    private lazy var square2 = GradientView(colors: [.yellow, .blue],
-                                            cornerRadius: 8, multiplier: 3)
+    private lazy var square2 = GradientView(colors: [.white, .red, .white],
+                                            cornerRadius: 8, multiplier: 3, gradientType: .radial)
     
-    private lazy var squaresArray: [GradientView] = [squareView, square2]
+    private lazy var squaresArray: [GradientView] = [self.squareView, self.square2]
     
     private var leadingConstraintsArray: [NSLayoutConstraint] = []
     private var traillingConstraintsArray: [NSLayoutConstraint] = []
     
-    var animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1, curve: .linear)
+    var animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 1.5, curve: .linear)
     
     var cubeSide: CGFloat = 64
     let multipier: CGFloat = 1.5
@@ -40,7 +40,7 @@ class ViewController: UIViewController {
             .init(item: self.slider, attribute: .top, relatedBy: .equal,
                   toItem: self.squareView, attribute: .bottom, multiplier: 1, constant: self.cubeSide),
             .init(item: self.square2, attribute: .top, relatedBy: .equal,
-                  toItem: self.slider, attribute: .bottom, multiplier: 1, constant: self.cubeSide)
+                  toItem: self.slider, attribute: .bottom, multiplier: 1, constant: self.cubeSide * 1.5)
         ])
     }
     
@@ -135,9 +135,8 @@ class ViewController: UIViewController {
                                     cornerRadius: $0.layer.cornerRadius)
             
             $0.layer.shadowPath = path.cgPath
-            $0.layer.shadowOffset = CGSize(width: 5, height: 10)
+            $0.layer.shadowOffset = CGSize(width: 0, height: 0)
             $0.layer.shadowOpacity = 1
-            $0.layer.shadowRadius = 3
             $0.layer.shadowColor = UIColor.gray.cgColor
             $0.layer.masksToBounds = false
         }

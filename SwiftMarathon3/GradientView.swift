@@ -9,17 +9,25 @@ import UIKit
 
 class GradientView: UIView {
     
+    enum GradientType {
+        case linear
+        case radial
+    }
+    
     public var gradientColors: [UIColor]
     public var sizeMultiplier: CGFloat
-
+    
+    private var gradientType: GradientType
+    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         self.setGradient(colors: self.gradientColors)
     }
     
-    init(colors: [UIColor], cornerRadius: CGFloat, multiplier: CGFloat) {
+    init(colors: [UIColor], cornerRadius: CGFloat, multiplier: CGFloat, gradientType: GradientType = .linear) {
         self.gradientColors = colors
         self.sizeMultiplier = multiplier
+        self.gradientType = gradientType
         super.init(frame: .zero)
         
         self.backgroundColor = .clear
@@ -45,10 +53,21 @@ class GradientView: UIView {
         context.saveGState()
         path.addClip()
         
-        let startPoint = colors.count == 2 ? CGPoint(x: -bounds.width / 3, y: -bounds.height / 3) : .zero
-        let endPoint = CGPoint(x: bounds.width, y: bounds.height)
+        switch self.gradientType {
+        case .linear:
+            let startPoint = colors.count == 2 ? CGPoint(x: -bounds.width / 3, y: -bounds.height / 3) : .zero
+            let endPoint = CGPoint(x: bounds.width, y: bounds.height)
+            context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: .drawsBeforeStartLocation)
+        case .radial:
+            context.drawRadialGradient(
+                gradient,
+                startCenter: CGPoint(x: bounds.width / 2, y: bounds.height / 2),
+                startRadius: bounds.width / 4,
+                endCenter: CGPoint(x: bounds.width / 2, y: bounds.height / 2),
+                endRadius: bounds.width / 2 ,
+                options: [.drawsBeforeStartLocation, .drawsAfterEndLocation])
+        }
         
-        context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: .drawsBeforeStartLocation)
         context.restoreGState()
     }
     
